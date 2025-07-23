@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask TODO</title>
+    <style>
+        .done { text-decoration: line-through; color: grey; }
+        .priority-1 { border-left: 3px solid #ccc; } /* Низкий */
+        .priority-2 { border-left: 3px solid orange; } /* Средний */
+        .priority-3 { border-left: 3px solid red; } /* Высокий */
+        .task-item { padding: 8px; margin: 4px 0; }
+    </style>
+</head>
+<body>
+    <h1>Список задач</h1>
+
+    <!-- Форма добавления -->
+     <form action="/add" method="POST">
+        <input type="text" name="title" placeholder="Новая задача" required>
+        <select name="priority">
+            <option value="1">Низкий приоритет</option>
+            <option value="2">Средний приоритет</option>
+            <option value="3">Высокий приоритет</option>
+        </select>
+        <button type="submit">Добавить</button>
+    </form>
+
+    <!-- Список задач -->
+    <ul style="list-style: none; padding: 0;">
+        {% for task in tasks %}
+        <li class="task-item priority-{{ task.priority }} {{ 'done' if task.done else '' }}">
+            {{ task.title }}
+            <a href="{{ url_for('update_task', task_id=task.id) }}">✔</a>
+            <a href="{{ url_for('delete_task', task_id=task.id) }}">✖</a>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
